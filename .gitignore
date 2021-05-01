@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # terraform providers
-**/providers/**
+tf_simple_kubernets/.terraform/providers/**
