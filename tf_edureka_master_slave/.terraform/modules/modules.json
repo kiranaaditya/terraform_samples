@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"nat-instance","Source":"int128/nat-instance/aws","Version":"2.0.0","Dir":".terraform/modules/nat-instance"}]}
