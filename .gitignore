@@ -131,6 +131,6 @@ dmypy.json
 # terraform providers
 **/providers
 
-# Ignoring hidden files
-**/.*
+# Ignoring hidden terraform files
+**/.terraform*
 
