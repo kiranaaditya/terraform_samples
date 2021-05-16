@@ -25,5 +25,5 @@ variable "instance-type-slave" {
 
 variable "project_name" {
   type    = string
-  default = "edureka simple master slave for learning"
+  default = "edureka"
 }

@@ -11,6 +11,7 @@ resource "aws_vpc" "vpc-edureka" {
   )
 }
 
+# Create an elastic IP.
 resource "aws_eip" "nat" {
   vpc      = true
   provider = aws.region-edureka
@@ -29,7 +30,7 @@ resource "aws_nat_gateway" "ngw-edureka" {
   depends_on = [aws_internet_gateway.igw-edureka]
 }
 
-#Create an Internet gateway for the VPC
+#Create an Internet gateway for public subnets
 resource "aws_internet_gateway" "igw-edureka" {
   provider = aws.region-edureka
   vpc_id   = aws_vpc.vpc-edureka.id

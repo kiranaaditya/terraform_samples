@@ -1,0 +1,4 @@
+v0.0.1
+* The architechture for the instances works all fine. The deployment is also fine.
+* The terraform part of the deployment is working. Now will be working on the ansible part of configuration management.
+
