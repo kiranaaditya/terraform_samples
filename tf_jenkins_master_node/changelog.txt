@@ -1,0 +1,17 @@
+v0.0.1
+* The architechture for the instances works all fine. The deployment is also fine.
+* The terraform part of the deployment is working. Now will be working on the ansible part of configuration management.
+
+v0.1.0
+* Forked the repo to a separate branch "without_jump".
+* Actively worked branch.
+* Terraform is working.
+* Ansible has been tested and have to run the actual deployment.
+
+v0.1.1
+* Terraform is finally working as expected down to the aws S3 bucket creation and the iam policy part.
+
+
+v0.1.2 (Feature)
+* Have to test a manual idea of daily jenkins backup.
+* Test a manual idea of restoring from the bckup during new jenkins deployment.

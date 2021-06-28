@@ -1,0 +1,18 @@
+---
+# handlers file for basic_devops_setup.vagrant
+
+  - name: Clean the yum repo
+    shell: yum clean all
+
+  - name: Daemon reload
+    become: yes
+    systemd:
+      daemon_reload: yes
+
+  - name: Start services
+    become: yes
+    systemd:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+    with_items: "{{ services_to_start }}"

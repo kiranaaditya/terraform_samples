@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: devops-setup
+    box: geerlingguy/centos7
+    memory: 1024
+    instance_raw_config_args:
+      - "vm.network 'forwarded_port', guest: 80, host: 8088"
+      - "vm.network 'forwarded_port', guest: 8080, host: 8089"
+      - "vm.network 'forwarded_port', guest: 8081, host: 8090"
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
