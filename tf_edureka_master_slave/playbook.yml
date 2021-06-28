@@ -1,0 +1,5 @@
+---
+- name: Run the role to install the devops tools
+  hosts: all
+  roles:
+    - basic_devops_setup

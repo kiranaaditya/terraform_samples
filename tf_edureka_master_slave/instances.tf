@@ -11,12 +11,19 @@ resource "aws_instance" "edureka-master" {
   ami                         = data.aws_ssm_parameter.linuxAmi.value
   instance_type               = var.instance-type-master
   key_name                    = aws_key_pair.edureka-key.key_name
-  associate_public_ip_address = false
-  security_groups             = [aws_security_group.sg-master-edureka.id]
+  associate_public_ip_address = true
+  security_groups             = [aws_security_group.sg-master-node-edureka.id]
   subnet_id                   = aws_subnet.subnet-edureka-master-slave.id
+  provisioner "local-exec" {
+    command = <<EOF
+    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-master_playbook.yml
+    EOF
+  }
   tags = merge(local.common_tags, {
-    Name        = "edureka-master"
+    Name        = "edureka_master"
     Description = "Master instance for edureka env"
+    Role        = "master"
     }
   )
 }
@@ -27,17 +34,24 @@ resource "aws_instance" "edureka-slave" {
   ami                         = data.aws_ssm_parameter.linuxAmi.value
   instance_type               = var.instance-type-slave
   key_name                    = aws_key_pair.edureka-key.key_name
-  associate_public_ip_address = false
-  security_groups             = [aws_security_group.sg-slave-edureka.id]
+  associate_public_ip_address = true
+  security_groups             = [aws_security_group.sg-master-node-edureka.id]
   subnet_id                   = aws_subnet.subnet-edureka-master-slave.id
+  provisioner "local-exec" {
+    command = <<EOF
+    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-slave_playbook.yml
+    EOF
+  }
   tags = merge(local.common_tags, {
-    Name        = "edureka-slave"
+    Name        = "edureka_slave"
     Description = "Slave instance for edureka env"
+    Role        = "slave"
     }
   )
 }
 
-#Create a jump server 
+/* #Create a jump server 
 resource "aws_instance" "edureka-jump" {
   provider                    = aws.region-edureka
   ami                         = "ami-00a9d4a05375b2763"
@@ -50,4 +64,4 @@ resource "aws_instance" "edureka-jump" {
     Name        = "jump-edureka"
     Description = "Jump server for edureka env"
   })
-}
+} */

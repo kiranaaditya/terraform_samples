@@ -1,15 +1,15 @@
 #Create SG for allowing all ports within the subnet for Master nodes.
-resource "aws_security_group" "sg-master-edureka" {
+resource "aws_security_group" "sg-master-node-edureka" {
   provider    = aws.region-edureka
-  name        = "edureka-master"
-  description = "Allow port 22 for now"
+  name        = "edureka-master-node"
+  description = "Access is restricted with NACL"
   vpc_id      = aws_vpc.vpc-edureka.id
   ingress {
     description = "Allow all ports within the VPC"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 0
@@ -24,7 +24,7 @@ resource "aws_security_group" "sg-master-edureka" {
   )
 }
 
-#Create SG for allowing all ports within the subnet for Slave nodes.
+/* #Create SG for allowing all ports within the subnet for Slave nodes.
 resource "aws_security_group" "sg-slave-edureka" {
   provider    = aws.region-edureka
   name        = "slave-sg"
@@ -48,9 +48,9 @@ resource "aws_security_group" "sg-slave-edureka" {
     description = "Security group for slave in the edureka sample"
     }
   )
-}
+} */
 
-#Create a SG for jump server
+/* #Create a SG for jump server
 resource "aws_security_group" "sg-jump-edureka" {
   provider    = aws.region-edureka
   name        = "jump-sg"
@@ -88,4 +88,4 @@ resource "aws_security_group" "sg-jump-edureka" {
     description = "Security group for slave in the edureka sample"
     }
   )
-}
+} */

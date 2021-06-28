@@ -1,0 +1,40 @@
+---
+# defaults file for basic_devops_setup.vagrant
+prepare_packages:
+  - telnet
+  - wget
+  - curl
+  - vim
+  - git
+
+jenkins_packages:
+  - jenkins
+  - java-11-openjdk-devel
+  - firewalld
+
+services_to_start:
+  - firewalld
+  - jenkins
+  - docker
+
+docker_packages_to_remove:
+  - docker
+  - docker-client
+  - docker-client-latest
+  - docker-common
+  - docker-latest
+  - docker-latest-logrotate
+  - docker-logrotate
+  - docker-engine
+
+docker_packages_to_install:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+packages_for_python:
+  - openssl-devel
+  - bzip2-devel
+  - libffi-devel
+
+python_version: 3.8.3

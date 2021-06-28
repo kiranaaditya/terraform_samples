@@ -11,7 +11,7 @@ resource "aws_vpc" "vpc-edureka" {
   )
 }
 
-# Create an elastic IP.
+/* # Create an elastic IP.
 resource "aws_eip" "nat" {
   vpc      = true
   provider = aws.region-edureka
@@ -28,7 +28,7 @@ resource "aws_nat_gateway" "ngw-edureka" {
     }
   )
   depends_on = [aws_internet_gateway.igw-edureka]
-}
+} */
 
 #Create an Internet gateway for public subnets
 resource "aws_internet_gateway" "igw-edureka" {
@@ -41,7 +41,7 @@ resource "aws_internet_gateway" "igw-edureka" {
   )
 }
 
-#Create a custom route table for private subnet
+/* #Create a custom route table for private subnet
 resource "aws_route_table" "rtb-edureka-private" {
   provider = aws.region-edureka
   vpc_id   = aws_vpc.vpc-edureka.id
@@ -58,7 +58,7 @@ resource "aws_route_table" "rtb-edureka-private" {
     }
   )
   depends_on = [aws_instance.edureka-jump]
-}
+} */
 
 #Create a custom route table for public subnet
 resource "aws_route_table" "rtb-edureka-public" {
@@ -82,21 +82,23 @@ resource "aws_route_table" "rtb-edureka-public" {
 resource "aws_route_table_association" "rtb-edureka-master-slave" {
   provider       = aws.region-edureka
   subnet_id      = aws_subnet.subnet-edureka-master-slave.id
-  route_table_id = aws_route_table.rtb-edureka-private.id
+  route_table_id = aws_route_table.rtb-edureka-public.id
+  depends_on     = [aws_subnet.subnet-edureka-master-slave]
 }
 
-#Create a new route table of the VPC(edureka_Sample) for our public subnet
+/* #Create a new route table of the VPC(edureka_Sample) for our public subnet
 resource "aws_route_table_association" "rtb-edureka-jump" {
   provider       = aws.region-edureka
   subnet_id      = aws_subnet.subnet-edureka-jump.id
   route_table_id = aws_route_table.rtb-edureka-public.id
-}
+} */
 
 #Create a subnet for master and slave
 resource "aws_subnet" "subnet-edureka-master-slave" {
-  provider   = aws.region-edureka
-  vpc_id     = aws_vpc.vpc-edureka.id
-  cidr_block = "10.0.1.0/24"
+  provider                = aws.region-edureka
+  vpc_id                  = aws_vpc.vpc-edureka.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
   tags = merge(local.common_tags, {
     Name        = "subnet-edureka-master-slave"
     Description = "Subnet for edureka master slave"
@@ -104,7 +106,7 @@ resource "aws_subnet" "subnet-edureka-master-slave" {
   )
 }
 
-#Create a subnet for jump server
+/* #Create a subnet for jump server
 resource "aws_subnet" "subnet-edureka-jump" {
   provider                = aws.region-edureka
   vpc_id                  = aws_vpc.vpc-edureka.id
@@ -114,4 +116,4 @@ resource "aws_subnet" "subnet-edureka-jump" {
     Name        = "subnet-edureka-jump"
     Description = "Subnet for edureka jump server"
   })
-}
+} */

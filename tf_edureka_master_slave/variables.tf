@@ -8,10 +8,10 @@ variable "region-edureka" {
   default = "us-east-1"
 }
 
-variable "instance-type-jump" {
+/* variable "instance-type-jump" {
   type    = string
   default = "t2.micro"
-}
+} */
 
 variable "instance-type-master" {
   type    = string

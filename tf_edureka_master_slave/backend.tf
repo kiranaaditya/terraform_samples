@@ -3,7 +3,7 @@ terraform {
   backend "s3" {
     region  = "us-east-1"
     profile = "default"
-    key     = "terraformedurekalearningstatefile"
+    key     = "terraformedurekalearningstatefile.tfstate"
     bucket  = "terraformstatefiles1991"
   }
 }

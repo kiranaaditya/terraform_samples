@@ -1,0 +1,5 @@
+---
+# tasks file for basic_devops_setup.vagrant
+- { import_tasks: jenkins_for_centos.yml, become: yes, when: ansible_hostname == 'role_master' }
+- { import_tasks: docker_for_centos.yml, become: yes }
+- { import_tasks: python_for_centos.yml, become: yes }
