@@ -8,18 +8,19 @@ resource "aws_key_pair" "edureka-key" {
 #Create a bootstrapped master instance to test
 resource "aws_instance" "edureka-master" {
   provider                    = aws.region-edureka
-  ami                         = data.aws_ssm_parameter.linuxAmi.value
+  ami                         = "ami-0b0af3577fe5e3532" #data.aws_ssm_parameter.linuxAmi.value
   instance_type               = var.instance-type-master
   key_name                    = aws_key_pair.edureka-key.key_name
   associate_public_ip_address = true
   security_groups             = [aws_security_group.sg-master-node-edureka.id]
   subnet_id                   = aws_subnet.subnet-edureka-master-slave.id
-  provisioner "local-exec" {
-    command = <<EOF
-    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
-    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-master_playbook.yml
-    EOF
-  }
+  iam_instance_profile        = aws_iam_instance_profile.ec2_s3_bucket_profile.name
+  # provisioner "local-exec" {
+  #   command = <<EOF
+  #   aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
+  #   && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-master_playbook.yml
+  #   EOF
+  # }
   tags = merge(local.common_tags, {
     Name        = "edureka_master"
     Description = "Master instance for edureka env"
@@ -31,18 +32,19 @@ resource "aws_instance" "edureka-master" {
 #Create a bootstrapped worker instance to test
 resource "aws_instance" "edureka-slave" {
   provider                    = aws.region-edureka
-  ami                         = data.aws_ssm_parameter.linuxAmi.value
+  ami                         = "ami-0b0af3577fe5e3532" #data.aws_ssm_parameter.linuxAmi.value
   instance_type               = var.instance-type-slave
   key_name                    = aws_key_pair.edureka-key.key_name
   associate_public_ip_address = true
   security_groups             = [aws_security_group.sg-master-node-edureka.id]
   subnet_id                   = aws_subnet.subnet-edureka-master-slave.id
-  provisioner "local-exec" {
-    command = <<EOF
-    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
-    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-slave_playbook.yml
-    EOF
-  }
+  iam_instance_profile        = aws_iam_instance_profile.ec2_s3_bucket_profile.name
+  # provisioner "local-exec" {
+  #   command = <<EOF
+  #   aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-edureka} --instance-ids ${self.id} \
+  #   && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/edureka-slave_playbook.yml
+  #   EOF
+  # }
   tags = merge(local.common_tags, {
     Name        = "edureka_slave"
     Description = "Slave instance for edureka env"

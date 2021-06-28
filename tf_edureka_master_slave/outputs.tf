@@ -22,6 +22,10 @@ output "edureka-slave-tag-role" {
   value = aws_instance.edureka-slave.tags.Role
 }
 
+output "s3-bucket-arn" {
+  value = aws_s3_bucket.jenkins_backup_bucket.arn
+}
+
 /* output "edureka-jump-public-ip" {
   value = aws_instance.edureka-jump.public_ip
 } */

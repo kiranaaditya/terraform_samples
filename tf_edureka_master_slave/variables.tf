@@ -8,6 +8,11 @@ variable "region-edureka" {
   default = "us-east-1"
 }
 
+variable "env_name" {
+  type    = string
+  default = "Dev"
+}
+
 /* variable "instance-type-jump" {
   type    = string
   default = "t2.micro"
