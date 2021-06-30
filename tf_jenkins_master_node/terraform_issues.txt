@@ -1,3 +1,0 @@
-Never forget to add "provider" to all the functions you are writing.
-
-A role needs a assumerole permission first. Then write the policy for it and attach it using the role policy attachment.

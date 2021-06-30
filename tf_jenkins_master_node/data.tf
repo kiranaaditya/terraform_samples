@@ -5,12 +5,15 @@ data "external" "whatsmyip" {
 
 #Get Linux AMI ID using SSM Parameter endpoint in us-east-1
 data "aws_ssm_parameter" "linuxAmi" {
-  provider = aws.region-edureka
+  provider = aws.region-jenkins
   name     = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
-#Get Linux AMI ID using SSM Parameter endpoint in us-east-1 for jump server
-#data "aws_ssm_parameter" "jumpAmi" {
-#  provider = aws.region-edureka
-#  name     = "/aws/service/"
-#}
+data "terraform_remote_state" "backend_resources" {
+  backend = "s3"
+  config = {
+    bucket = "terraformstatefiles1991"
+    key = "tfjenkinsmasternodesupportingresources.tfstate"
+    region  = "us-east-1"
+  }
+}

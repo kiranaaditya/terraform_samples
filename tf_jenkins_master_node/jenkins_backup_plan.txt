@@ -1,4 +1,0 @@
-Plan:
-    * Create and install the jenkins instance.
-    * Give an IAM user with read and write permission to a specific bucket.
-    * Write a cron job to sync the jenkins home folder with the S3 bucket.
