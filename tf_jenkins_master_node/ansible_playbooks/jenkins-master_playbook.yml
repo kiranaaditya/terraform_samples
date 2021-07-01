@@ -10,7 +10,7 @@
   #     name: test
   #     comment: test user to be removed
   #     expires: 1624869025
-  
+
   roles:
     - geerlingguy.repo-epel
     - geerlingguy.pip
@@ -18,3 +18,14 @@
     - geerlingguy.java
     - geerlingguy.jenkins
     - geerlingguy.docker
+    - xanmanning.awscli
+
+  tasks:
+    - name: Install basic packages
+      yum:
+        name: " {{ item }}"
+        state: present
+      with_items:
+        - telnet
+        - wget
+        - vim
