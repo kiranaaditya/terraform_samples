@@ -21,5 +21,12 @@ v0.2.0 (Major)
 * backend_resources.tf takes care of the setting up of the s3 bucket along with the iam role,policy, policy attachment and instance profile.
 * The main terraform code reads this remote state file and takes the value of the iam instance profile and attaches it to the instances.
 
+v0.2.1
+
+* Test the ansible part of the deployment. working
+
+v0.2.2
+* Move the permanent resources i.e vpc, igw, subnets, routing table, nacl, security groups along with s3 bucket and iam configuration to a separate directory out of tf_jenkins_master_node and create it as shared resources.
+
 v0.3.0 (Major)
 * The ansible code is working as expected.
