@@ -27,7 +27,4 @@ resource "aws_s3_bucket" "jenkins_backup_bucket" {
     Description = "Permanent s3 bucket created to store the jenkins configuration files"
     }
   )
-  lifecycle {
-    prevent_destroy = true
-  }
 }

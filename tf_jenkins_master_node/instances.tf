@@ -15,14 +15,14 @@ resource "aws_instance" "jenkins-master" {
   security_groups             = [aws_security_group.sg-master-node-jenkins.id]
   subnet_id                   = aws_subnet.subnet-jenkins-master-slave.id
   iam_instance_profile        = data.terraform_remote_state.backend_resources.outputs.iam_instance_profile_name
-  # provisioner "local-exec" {
-  #   command = <<EOF
-  #   aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-jenkins} --instance-ids ${self.id} \
-  #   && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-master_playbook.yml
-  #   EOF
-  # }
+  provisioner "local-exec" {
+    command = <<EOF
+    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-jenkins} --instance-ids ${self.id} \
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-master_playbook.yml -i ansible_playbooks/inventory_aws/tf.aws_ec2.yml
+    EOF
+  }
   tags = merge(data.terraform_remote_state.backend_resources.outputs.local_common_tags, {
-    Name        = "${data.terraform_remote_state.backend_resources.outputs.author_name}-${data.terraform_remote_state.backend_resources.outputs.project_name}-${data.terraform_remote_state.backend_resources.outputs.env_name}-master"
+    Name        = "${data.terraform_remote_state.backend_resources.outputs.author_name}_${data.terraform_remote_state.backend_resources.outputs.project_name}_${data.terraform_remote_state.backend_resources.outputs.env_name}_master"
     Description = "Master instance for jenkins env"
     Role        = "master"
     }
@@ -38,15 +38,14 @@ resource "aws_instance" "jenkins-node" {
   associate_public_ip_address = true
   security_groups             = [aws_security_group.sg-master-node-jenkins.id]
   subnet_id                   = aws_subnet.subnet-jenkins-master-slave.id
-  #iam_instance_profile        = aws_iam_instance_profile.ec2_s3_bucket_profile.name
-  # provisioner "local-exec" {
-  #   command = <<EOF
-  #   aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-jenkins} --instance-ids ${self.id} \
-  #   && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-slave_playbook.yml
-  #   EOF
-  # }
+  provisioner "local-exec" {
+    command = <<EOF
+    aws --profile ${var.profile} ec2 wait instance-status-ok --region ${var.region-jenkins} --instance-ids ${self.id} \
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-slave_playbook.yml
+    EOF
+  }
   tags = merge(data.terraform_remote_state.backend_resources.outputs.local_common_tags, {
-    Name        = "${data.terraform_remote_state.backend_resources.outputs.author_name}-${data.terraform_remote_state.backend_resources.outputs.project_name}-${data.terraform_remote_state.backend_resources.outputs.env_name}-node"
+    Name        = "${data.terraform_remote_state.backend_resources.outputs.author_name}_${data.terraform_remote_state.backend_resources.outputs.project_name}_${data.terraform_remote_state.backend_resources.outputs.env_name}_node"
     Description = "Node instance for jenkins env"
     Role        = "node"
     }

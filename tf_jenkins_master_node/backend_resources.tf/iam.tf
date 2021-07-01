@@ -32,9 +32,6 @@ resource "aws_iam_policy" "aws_ec2_s3" {
     Description = "Read and write access for ec2 instances to a bucket my-jenkins-backup-bucket"
     }
   )
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_iam_role" "ec2_s3_bucket" {
@@ -59,9 +56,6 @@ POLICY
     Description = "Read and write access for ec2 instances to a bucket my-jenkins-backup-bucket"
     }
   )
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "replication" {
@@ -78,7 +72,4 @@ resource "aws_iam_instance_profile" "ec2_s3_bucket_profile" {
     Description = "Read and write access for ec2 instances to a bucket my-jenkins-backup-bucket"
     }
   )
-  lifecycle {
-    prevent_destroy = true
-  }
 }
