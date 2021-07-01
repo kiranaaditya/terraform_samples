@@ -25,7 +25,7 @@ v0.2.1
 v0.2.2
 * Move the permanent resources i.e vpc, igw, subnets, routing table, nacl, security groups along with s3 bucket and iam configuration to a separate directory out of tf_jenkins_master_node and create it as shared resources.
 
-v0.3.1
+v0.2.3
 * Edit the forks to have parallel ansible operations.
 
 v0.4.0
