@@ -3,28 +3,29 @@
   hosts: " {{ passed_in_hosts }}"
   remote_user: ec2-user
   become_user: root
+  become: true
   vars:
-    awscli_install_os_dependencies: true
-    awscli_install_dir: /opt/awscli/bin
-    awscli_bin_dir: /usr/bin
-    awscli_venv_name: current
-    jenkins_prefer_lts: false
-
-  # tasks:
-  # - name: Add the user 'test' with a specific uid to test the playbook
-  #   user:
-  #     name: test
-  #     comment: test user to be removed
-  #     expires: 1624869025
+    pip_install_packages:
+      - awscli
+      - boto3
+      - ansible
+    jenkins_http_port: 8081
+    # jenkins_plugins:
+    #   - thinbackup
+    #   - git
+    #   - blueocean
+    #   - matrix-auth
+    #   - docker-plugin
+    #   - docker-workflow
+    #   - docker-build-publish
+    #   - ansible
 
   roles:
     - geerlingguy.repo-epel
     - geerlingguy.pip
-    - geerlingguy.ansible
     - geerlingguy.java
     - geerlingguy.jenkins
     - geerlingguy.docker
-    - xanmanning.awscli
 
   tasks:
     - name: Install basic packages
@@ -35,5 +36,34 @@
         - telnet
         - wget
         - vim
+        - git
 
-    - name: Sync the jenkins files with s3.
+    - name: Delete all the files within /var/lib/jenkins
+      shell: /usr/bin/rm -rf /var/lib/jenkins/*
+
+    - name: Download all the objects.
+      aws_s3:
+          bucket: kiran-jenkins-dev-2390185-s3-bucket
+          object: /jenkins_backup.tar.gz
+          dest: "/var/lib/jenkins/jenkins_backup.tar.gz"
+          mode: get
+    
+    - name: Expand the jenkins_backup.tar.gz
+      unarchive:
+        src: /var/lib/jenkins/jenkins_backup.tar.gz
+        dest: /var/lib/jenkins/
+        remote_src: yes
+      notify: Restart jenkins
+
+    - name: Delete the jenkins_backup.tar.gz
+      file:
+        path: /var/lib/jenkins/jenkins_backup.tar.gz
+        state: absent
+
+  handlers:
+    - name: Restart jenkins
+      service:
+        name: jenkins
+        state: restarted
+
+

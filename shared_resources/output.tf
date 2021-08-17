@@ -8,9 +8,9 @@ output "region" {
 #   value = provider.aws
 # }
 
-output "aws_key" {
-  value = aws_key_pair.kiran-key.key_name
-}
+# output "aws_key" {
+#   value = aws_key_pair.kiran-key.key_name
+# }
 
 output "profile" {
   value = var.profile

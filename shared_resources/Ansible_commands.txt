@@ -1,0 +1,4 @@
+Ansible commands:
+ansible-playbook --extra-vars 'passed_in_hosts=54.147.239.192' ansible_playbooks/jenkins-master_playbook.yml -i ansible_playbooks/inventory_aws/tf.aws_ec2.yml
+
+sudo su -s jenkins /bin/bash

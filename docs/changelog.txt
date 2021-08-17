@@ -33,3 +33,6 @@ v0.3.0 (Major)
 
 v0.3.1
 * Edit the forks to have parallel ansible operations.
+
+v1.0.0
+* Full jenkins automation is ready. Along with backup and restore solution.
