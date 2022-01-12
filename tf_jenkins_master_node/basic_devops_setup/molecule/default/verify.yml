@@ -1,0 +1,30 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Check the status of the jenkins using the URL
+    uri:
+      url: http://localhost:8081
+      status_code: 200,403
+
+  - name: Check the status of docker using the API call
+    uri:
+      url: http://localhost:1111/version
+      status_code: 200
+
+  - name: Check python version to check if it has installed correctly.
+    command: python3.8 -V
+    register: result
+
+  #- name: Debug the result
+  #  debug:
+  #    var: result
+
+  - name: Verify Python
+    assert:
+      that: result.failed == false
+      success_msg: Python has been successfully installed.
+      fail_msg: Check python installation

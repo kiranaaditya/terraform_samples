@@ -1,0 +1,27 @@
+---
+# Play to install python3.8 for centos 7
+  - name: Install the 'Development tools' package group
+    yum:
+      name: "@Development tools"
+      state: present
+
+  - name: Install other packages for python
+    yum:
+      name: "{{ packages_for_python }}"
+      state: present
+
+  - name: Extract the Python tar archive
+    unarchive:
+      src: https://www.python.org/ftp/python/{{ python_version }}/Python-{{ python_version }}.tgz
+      dest: /tmp/
+      remote_src: yes
+
+  - name: Setup installation by running the configure script
+    command:
+      chdir: /tmp/Python-{{ python_version }}
+      cmd: ./configure --enable-optimizations
+
+  - name: Install Python
+    command:
+      chdir: /tmp/Python-{{ python_version }}
+      cmd: sudo make altinstall

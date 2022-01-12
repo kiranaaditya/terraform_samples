@@ -1,0 +1,50 @@
+
+DNS host entries:
+* Will have to find a way to add /etc/hosts file with the proper entries.
+
+
+Outside access:
+* Will have to find a way to temporarily allow access to outside world for the purposes of remote configuration management and close it once done.
+* For the purposes of testing we will have to allow outside access for now.
+
+OR ansible provisioning through a jump server:
+* Will have to check ansible provisioning through a jump server.
+* OR use python fabric to write code to provision through a jump server.
+
+NAT Gateway:
+* Implementation of NAT GW SGs.
+
+
+##########################################################################################
+
+
+v0.2.1
+
+* Test the ansible part of the deployment. working
+
+v0.2.2
+* Move the permanent resources i.e vpc, igw, subnets, routing table, nacl, security groups along with s3 bucket and iam configuration to a separate directory out of tf_jenkins_master_node and create it as shared resources.
+
+v0.2.3
+* Edit the forks to have parallel ansible operations.
+
+v0.3.0
+Backup and restore plan for jenkins (Ansible infrastructure coding part):
+* Will create a s3 bucket (Done)
+* Will create a Backup folder within /var/lib/jenkins where I can store periodic backups of the jenkins conf files. (Done)
+* Create an initial backup of the stuff in s3. (Done)
+
+* Erase the entire /var/log/jenkins directory.
+* Create /var/log/jenkins/backup directory.
+* 
+* Pull the latest code from github.
+
+* Every hour there will be a differential backup running in the background 
+* Will initially make all the configuration and push the configuration to github. That will be the first commit.
+
+v0.4.1
+* Allow S3 bucket access only to the ec2 instance being created. No outside access.
+
+
+
+
