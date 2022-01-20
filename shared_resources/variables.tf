@@ -1,16 +1,16 @@
 variable "project_name" {
   type    = string
-  default = "jenkins"
+  default = "backend"
 }
 
 variable "env_name" {
   type    = string
-  default = "dev"
+  default = "prod"
 }
 
 variable "author_name" {
   type    = string
-  default = "kiran"
+  default = "aaditya"
 }
 
 variable "profile" {

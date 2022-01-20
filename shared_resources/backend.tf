@@ -4,7 +4,7 @@ terraform {
     region  = "us-east-1"
     profile = "default"
     key     = "tfsupportingresources.tfstate"
-    bucket  = "terraformstatefiles2021"
+    bucket  = "terraformaaditya2021"
   }
 }
 

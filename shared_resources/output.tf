@@ -32,7 +32,7 @@ output "author_name" {
 }
 
 output "local_common_tags" {
-    value = local.common_tags
+  value = local.common_tags
 }
 
 #############################################################################################

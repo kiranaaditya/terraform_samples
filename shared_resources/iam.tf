@@ -73,3 +73,43 @@ resource "aws_iam_instance_profile" "ec2_s3_bucket_profile" {
     }
   )
 }
+
+resource "aws_iam_role" "ec2_ec2_access" {
+  name = "ec2_access_to_ec2_instances"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+  tags = merge(local.common_tags, {
+    Name        = "${var.author_name}-${var.project_name}-${var.env_name}-iam-role"
+    Description = "Read only access for ec2 instances to list ec2 instance details"
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_ec2_instance_access" {
+  role       = aws_iam_role.ec2_ec2_access.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+}
+
+resource "aws_iam_instance_profile" "ec2_ec2_instance_access_profile" {
+  name       = "ec2_access_to_ro_ec2_profile"
+  role       = aws_iam_role.ec2_ec2_access.name
+  depends_on = [aws_iam_role.ec2_ec2_access]
+  tags = merge(local.common_tags, {
+    Name        = "${var.author_name}-${var.project_name}-${var.env_name}-iam-instance-profile"
+    Description = "Read only access for ec2 instances to list ec2 instance details"
+    }
+  )
+}
