@@ -1,4 +1,0 @@
-skip_list:  # or 'warn_list' to warn but not critically stop the execution 'skip_list' to silence them completely
-  - command-instead-of-module  # Using command rather than module
-  - role-name
-  - no-changed-when
