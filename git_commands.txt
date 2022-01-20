@@ -1,0 +1,5 @@
+git remote add origin https://github.com/kiranaaditya/terraform_samples.git
+git remote -v
+git branch -a
+git fetch origin without_jump_for_playground
+git pull origin without_jump_for_playground
