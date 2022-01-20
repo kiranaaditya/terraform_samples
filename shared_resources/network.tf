@@ -5,7 +5,7 @@ resource "aws_vpc" "vpc-kiran" {
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags = merge(local.common_tags, {
-    Name        = "$${var.author_name}-${var.project_name}-${var.env_name}-vpc"
+    Name        = "${var.author_name}-${var.project_name}-${var.env_name}-vpc"
     Description = "VPC for kiran"
     Role        = "Network"
     }

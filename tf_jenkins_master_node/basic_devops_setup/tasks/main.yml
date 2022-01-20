@@ -1,8 +1,0 @@
----
-- name: Gather information about all instances in AZ ap-southeast-2a
-  community.aws.ec2_instance_info:
-    filters:
-      availability-zone: us-east-1
-- include_tasks: prepare.yml
-- include_tasks: setup_redhat.yml
-  when: ansible_os_family=='RedHat'
