@@ -7,8 +7,8 @@ data "aws_ssm_parameter" "linuxAmi" {
 data "terraform_remote_state" "backend_resources" {
   backend = "s3"
   config = {
-    bucket = "terraformstatefiles1991"
-    key = "tfsupportingresources.tfstate"
-    region  = "us-east-1"
+    bucket = "terraformstatefiles2021"
+    key    = "tfsupportingresources.tfstate"
+    region = "us-east-1"
   }
 }

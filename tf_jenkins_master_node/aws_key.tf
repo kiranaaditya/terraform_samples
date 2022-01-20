@@ -1,0 +1,6 @@
+#Create key-pair for logging into EC2 in us-east-1
+resource "aws_key_pair" "kiran-key" {
+  provider   = aws.kiran
+  key_name   = "kiran"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCXhQqKiHDaFfNph6o8N6BeeW0EpSTr5uRDRadSg3OpmZQEm/5V6NsuexJaVZVLbY1EZtvfVwi/oj2Tv/q6JjCNzBCSylcmTL76tCdQdR/L0zBlotVGyGtjJdV110bUiSb03cf5ZEY1d17TV09P5cCqknTLeXnVQwYfAVh/1gzJml5Uwk8/BFPSajSTqGlkERW0MXfZN8YVVA1kuqBWgVBNEQM6AzOOslWMt3CB/FEhmq+5DG141cdDdvgZNCykmlwNQtk165+1m/F1z85txJmU/8lN2tNaHyoKVKkd7hDHIPlF1YoEzj4lJksmxB3F3lZ5EvuZtDL9H3ruyVqAVKH6G1IC+jm0lNjINiRDN0Rv9pAp6SmkYItf5Zd6r6AoU51rpCq/N8zb846diyv6dJhYgsYlMn8FNnFPN9XZjazRF56MMeZ2wkJablRGgQGclciFDGHgdDf+W4o+s/43DrEUzXurgFXsp02IEYyI/W6O8WzisFyQQDiPaIvppEKEM8= kaditya@localhost.localdomain"
+}

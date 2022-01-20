@@ -1,9 +1,10 @@
 #Create a bootstrapped master instance to test
 resource "aws_instance" "jenkins-master" {
-  provider                    = aws.kiran
-  ami                         = "ami-0b0af3577fe5e3532" #data.aws_ssm_parameter.linuxAmi.value
-  instance_type               = var.instance-type-master
-  key_name                    = data.terraform_remote_state.backend_resources.outputs.aws_key
+  provider      = aws.kiran
+  ami           = "ami-0b0af3577fe5e3532" #data.aws_ssm_parameter.linuxAmi.value
+  instance_type = var.instance-type-master
+  # key_name                    = data.terraform_remote_state.backend_resources.outputs.aws_key
+  key_name                    = aws_key_pair.kiran-key.key_name
   associate_public_ip_address = true
   security_groups             = [data.terraform_remote_state.backend_resources.outputs.security_group]
   subnet_id                   = data.terraform_remote_state.backend_resources.outputs.subnet
@@ -27,7 +28,7 @@ resource "aws_instance" "jenkins-node" {
   provider                    = aws.kiran
   ami                         = "ami-0b0af3577fe5e3532" #data.aws_ssm_parameter.linuxAmi.value
   instance_type               = var.instance-type-slave
-  key_name                    = data.terraform_remote_state.backend_resources.outputs.aws_key
+  key_name                    = aws_key_pair.kiran-key.key_name
   associate_public_ip_address = true
   security_groups             = [data.terraform_remote_state.backend_resources.outputs.security_group]
   subnet_id                   = data.terraform_remote_state.backend_resources.outputs.subnet

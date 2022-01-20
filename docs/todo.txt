@@ -28,12 +28,19 @@ v0.2.2
 v0.2.3
 * Edit the forks to have parallel ansible operations.
 
-v0.4.0
-* Keep ec2 instance and the s3 bucket in sync with ansible.
-* Edit the crontab file with the aws s3 sync command and place it in the master instance at start.
-* Perform a sync with the S3 using the crontab whenever the instance is about to get destroyed.
-* Next time the instance is spun up it should automatically get synced with the S3 bucket and download the jenkins conf files.
+v0.3.0
+Backup and restore plan for jenkins (Ansible infrastructure coding part):
+* Will create a s3 bucket (Done)
+* Will create a Backup folder within /var/lib/jenkins where I can store periodic backups of the jenkins conf files. (Done)
+* Create an initial backup of the stuff in s3. (Done)
 
+* Erase the entire /var/log/jenkins directory.
+* Create /var/log/jenkins/backup directory.
+* 
+* Pull the latest code from github.
+
+* Every hour there will be a differential backup running in the background 
+* Will initially make all the configuration and push the configuration to github. That will be the first commit.
 
 v0.4.1
 * Allow S3 bucket access only to the ec2 instance being created. No outside access.
