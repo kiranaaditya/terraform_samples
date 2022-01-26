@@ -1,0 +1,7 @@
+---
+roles:
+  - name: geerlingguy.repo-epel
+  - name: geerlingguy.pip
+  - name: geerlingguy.java
+  - name: geerlingguy.jenkins
+  - name: geerlingguy.docker

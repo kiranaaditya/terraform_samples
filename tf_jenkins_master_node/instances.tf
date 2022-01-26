@@ -12,8 +12,20 @@ resource "aws_instance" "jenkins-master" {
   provisioner "local-exec" {
     command = <<EOF
     aws --profile ${data.terraform_remote_state.backend_resources.outputs.profile} ec2 wait instance-status-ok --region ${data.terraform_remote_state.backend_resources.outputs.region} --instance-ids ${self.id} \
-    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-master_playbook.yml -i ansible_playbooks/inventory_aws/tf.aws_ec2.yml
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Role_${self.tags.Role}' ansible_playbooks/jenkins-master_playbook.yml -i ansible_playbooks/inventory_aws/tf_aws_ec2.yml
     EOF
+  }
+  provisioner "remote-exec" {
+    when = destroy
+    inline = [
+      "sudo su jenkins -c '/usr/local/bin/backup-jenkins --bucket=aaditya-backend-prod-4079847-s3-bucket create'"
+    ]
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = file("~/.ssh/id_rsa")
+      host        = self.public_ip
+    }
   }
   tags = merge(data.terraform_remote_state.backend_resources.outputs.local_common_tags, {
     Name        = "${data.terraform_remote_state.backend_resources.outputs.author_name}_${data.terraform_remote_state.backend_resources.outputs.project_name}_${data.terraform_remote_state.backend_resources.outputs.env_name}_master"
@@ -35,7 +47,7 @@ resource "aws_instance" "jenkins-node" {
   provisioner "local-exec" {
     command = <<EOF
     aws --profile ${data.terraform_remote_state.backend_resources.outputs.profile} ec2 wait instance-status-ok --region ${data.terraform_remote_state.backend_resources.outputs.region} --instance-ids ${self.id} \
-    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Name_${self.tags.Name}' ansible_playbooks/jenkins-slave_playbook.yml -i ansible_playbooks/inventory_aws/tf.aws_ec2.yml
+    && ansible-playbook --extra-vars 'passed_in_hosts=tag_Role_${self.tags.Role}' ansible_playbooks/jenkins-slave_playbook.yml -i ansible_playbooks/inventory_aws/tf_aws_ec2.yml
     EOF
   }
   tags = merge(data.terraform_remote_state.backend_resources.outputs.local_common_tags, {

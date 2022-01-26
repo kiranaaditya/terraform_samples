@@ -43,6 +43,10 @@ output "jenkins_backup_bucket_arn" {
   value = aws_s3_bucket.jenkins_backup_bucket.arn
 }
 
+output "jenkins_backup_bucket_name" {
+  value = aws_s3_bucket.jenkins_backup_bucket.id
+}
+
 #############################################################################################
 
 # IAM instance profile name
