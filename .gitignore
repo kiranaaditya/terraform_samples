@@ -134,3 +134,6 @@ dmypy.json
 # Ignoring hidden terraform files
 **/.terraform
 *.terraform.lock.hcl
+
+# Ignoring long_log.txt
+long_log.txt
