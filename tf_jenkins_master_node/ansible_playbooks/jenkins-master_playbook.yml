@@ -1,1 +1,122 @@
-/home/kaaditya/ansible/ansible_playbooks/jenkins-master_playbook.yml
+---
+- name: Deploying to master
+  # hosts: " {{ passed_in_hosts }}"
+  # remote_user: ec2-user
+  # become_user: root
+  hosts: all
+  become: true
+  vars:
+    pip_install_packages:
+      - awscli
+      - boto3
+      - ansible
+      - jenkins-backup-s3
+    s3_bucket_name: aaditya-backend-prod-4079847-s3-bucket
+
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.pip
+    - geerlingguy.java
+
+  tasks:
+    - name: Install basic packages
+      yum:
+        name: " {{ item }}"
+        state: present
+      with_items:
+        - telnet
+        - wget
+        - vim
+        - git
+
+    - name: Gather information about the instance
+      ec2_instance_info:
+      vars:
+        ansible_become: false
+        region: us-east-1
+        filters:
+          "tag:Role": "master"
+          instance-state-name: [ "running"]
+      register: ec2_node_info
+      delegate_to: localhost
+
+    - name: Clean info with just details about the instance that is running.
+      debug: msg="{{ ec2_node_info.instances | json_query(jmesquery) }}"
+      vars:
+        jmesquery: "[?state.name=='running']"
+      register: ec2_clean_info
+
+    - name: Print the ec2 instance info.
+      debug:
+        var: ec2_clean_info.msg[0].iam_instance_profile.arn
+
+    - name: Attach the s3 bucket policy to the ec2 instance.
+      command: aws ec2 associate-iam-instance-profile --instance-id "{{ ec2_clean_info.msg[0].instance_id }}" --iam-instance-profile Name=ec2_access_to_S3_bucket_profile
+      vars:
+        ansible_become: false
+      delegate_to: localhost
+      ignore_errors: yes
+
+    - name: Print the ec2 instance info.
+      debug:
+        var: ec2_clean_info.msg[0].iam_instance_profile.arn
+      
+    - name: Installing from jenkins backup.
+      block:
+      - name: Fresh installation of jenkins
+        include_role:
+          name: geerlingguy.jenkins
+        vars:
+          jenkins_http_port: 8081
+          jenkins_plugins:
+            - git
+            - terraform
+            - blueocean
+            - kubernets
+            - kubernets-client-api
+            - kubernets-cli
+            - matrix-auth
+            - docker-plugin
+            - docker-workflow
+            - docker-build-publish
+            - ansible
+
+      - name: Manipulating the jenkins user.
+        user:
+          name: jenkins
+          shell: /bin/bash
+          password: "{{ 'jenkins' | password_hash('sha512') }}"
+
+      - name: Restoring from existing jenkins backup.
+        command: "/usr/local/bin/backup-jenkins --bucket={{ s3_bucket_name }} restore latest"
+        become_user: jenkins
+        register: backup_restored
+
+      - name: Display the output of the previous backup job
+        debug:
+          var: backup_restored
+
+      rescue:
+      - name: Do a fresh installation of jenkins
+        include_role:
+          name: geerlingguy.jenkins
+        vars:
+          jenkins_http_port: 8081
+          jenkins_plugins:
+            - git
+            - terraform
+            - blueocean
+            - kubernets
+            - kubernets-client-api
+            - kubernets-cli
+            - matrix-auth
+            - docker-plugin
+            - docker-workflow
+            - docker-build-publish
+            - ansible
+
+  handlers:
+    - name: Restart jenkins
+      service:
+        name: jenkins
+        state: restarted
